@@ -7,3 +7,7 @@ nodes:
     hostPort: 30090
   - containerPort: 30080
     hostPort: 30080
+  - containerPort: 30081
+    hostPort: 30081
+  - containerPort: 30091
+    hostPort: 30091
