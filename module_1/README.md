@@ -33,4 +33,4 @@ export PATH=$PATH:$GOPATH/bin
 
 #### Kind startup
 
-Use `kind create cluster --conifg kind-config.yaml`
+Use `kind create cluster --conifg kind-config.yaml` or kind_startup.sh

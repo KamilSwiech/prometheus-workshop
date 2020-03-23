@@ -5,3 +5,5 @@ nodes:
   extraPortMappings:
   - containerPort: 30090
     hostPort: 30090
+  - containerPort: 30080
+    hostPort: 30080
