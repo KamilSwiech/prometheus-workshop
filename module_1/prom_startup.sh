@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd prometheus/
 yamls=$(find . | grep .yaml)
 namespace=$(find . | grep namespace)
 
