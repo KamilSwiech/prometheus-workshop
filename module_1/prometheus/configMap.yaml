@@ -46,25 +46,27 @@ data:
           action: keep
           regex: default;kubernetes;https
 
-      - job_name: 'kubernetes-pods'
+          #      - job_name: 'kubernetes-pods'
+          #
+          #        kubernetes_sd_configs:
+          #        - role: pod
+          #
+          #        relabel_configs:
+          #        - source_labels: [__meta_kubernetes_namespace]
+          #          action: replace
+          #          target_label: kubernetes_namespace
+          #        - source_labels: [__meta_kubernetes_pod_name]
+          #          action: replace
+          #          target_label: kubernetes_pod_name
 
-        kubernetes_sd_configs:
-        - role: pod
-
-        relabel_configs:
-        - source_labels: [__meta_kubernetes_namespace]
-          action: replace
-          target_label: kubernetes_namespace
-        - source_labels: [__meta_kubernetes_pod_name]
-          action: replace
-          target_label: kubernetes_pod_name
-      
       - job_name: 'kube-state-metrics'
         static_configs:
                 - targets: ['prometheus-service.monitoring.svc.cluster.local:9090']
       - job_name: 'hello-counter'
+        metrics_path: '/'
         static_configs:
                 - targets: ['hello.monitoring.svc.cluster.local:8000']
+
 
       - job_name: 'kubernetes-cadvisor'
 
