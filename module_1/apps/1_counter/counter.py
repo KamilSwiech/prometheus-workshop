@@ -13,7 +13,7 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
                 raise Exception
         self.send_response(200)
         self.end_headers()
-        self.wfile.write("Hello World")
+        self.wfile.write(b"Hello World")
         
 if __name__ == "__main__":
     start_http_server(8000)
