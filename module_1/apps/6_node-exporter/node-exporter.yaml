@@ -21,6 +21,8 @@ kind: Service
 metadata:
   name: node-exporter
   namespace: monitoring
+  #  annotations:
+          #    prometheus.io/scrape: 'true'
 spec:
   selector:
     app: node-exporter
