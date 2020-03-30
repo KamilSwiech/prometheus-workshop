@@ -3,14 +3,6 @@ alertmanager:
   config:
     global:
       resolve_timeout: 5m
-    route:
-      group_by: ['job']
-      group_wait: 2m
-      group_interval: 10m
-      repeat_interval: 24h
-      receiver: default
-    receivers:
-    - name: default
 grafana:
   resources:
     limits:
@@ -20,6 +12,9 @@ grafana:
       cpu: 10m
       memory: 100Mi
 prometheus:
+  service:
+    nodePort: 30090
+    type: NodePort
   prometheusSpec:
     externalLabels:
        cluster: kind
@@ -30,17 +25,6 @@ prometheus:
       requests:
         cpu: 100m
         memory: 400Mi
-# additionalServiceMonitors: 
-#   - name: "pop-prometheus-operator-cloud-app"
-#     selector:
-#       matchLabels:
-#         app.kubernetes.io/type: cloud-app      
-#     namespaceSelector:
-#       matchNames: 
-#         - gnet
-#     endpoints: 
-#       - port: http
-#         path: /actuator/prometheus
 prometheus-node-exporter:
   resources:
     limits:
