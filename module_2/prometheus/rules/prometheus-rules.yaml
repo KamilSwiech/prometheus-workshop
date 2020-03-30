@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  creationTimestamp: null
+  labels:
+    prometheus: pop-prometheus-operator-prometheus
+    role: alert-rules
+    app: prometheus-operator
+    release: pop
+  name: prometheus-nodes-rules
+spec:
+  groups:
+    - name: ./my-rules
+      rules:
+      - record: NodeNotReady
+        expr: kube_node_status_condition{condition="Ready",status="true"} == 0

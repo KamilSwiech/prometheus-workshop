@@ -26,16 +26,16 @@ prometheus:
         cpu: 100m
         memory: 400Mi
   additionalServiceMonitors: 
-    - name: "pop-prometheus-operator-cloud-app"
+    - name: "pop-prometheus-operator-custom-apps"
       selector:
         matchLabels:
-          app.kubernetes.io/type: cloud-app      
+          app.kubernetes.io/type: custom-app      
       namespaceSelector:
         matchNames: 
           - gnet
       endpoints: 
         - port: http
-          path: /actuator/prometheus
+          path: /
 prometheus-node-exporter:
   resources:
     limits:
