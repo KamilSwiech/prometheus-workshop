@@ -14,7 +14,6 @@ spec:
     matchNames:
       - default
   endpoints:
-      - port: server
+      - port: metrics
         path: /
-
 
