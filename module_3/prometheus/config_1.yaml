@@ -1,8 +1,10 @@
 ---
 alertmanager:
-  config:
-    global:
-      resolve_timeout: 5m
+  service:
+    nodePort: 30093
+    type: NodePort
+    port: 9093
+    targetPort: 9093
 grafana:
   service:
     nodePort: 30800
