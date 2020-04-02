@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  creationTimestamp: null
+  labels:
+    prometheus: pop-prometheus-operator-prometheus
+    role: alert-rules
+    app: prometheus-operator
+    release: pop
+  name: prometheus-nodes-rules
+spec:
+  groups:
+    - name: ./my-custom-rules
+      rules:
+      - record: instance:node_network_received_bytes:rate:sum
+        expr: sum by(instance) (rate(node_network_receive_bytes_total[3m]))
