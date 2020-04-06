@@ -1,10 +1,10 @@
 global:
   resolve_timeout: 5m
 route:
-  group_by: ['job']
+  group_by: ['job','service','cluster']
   group_wait: 2m
-  group_interval: 10m
-  repeat_interval: 12h
+  group_interval: 3m
+  repeat_interval: 4m
   receiver: default
   routes:
          - match:
@@ -17,16 +17,6 @@ receivers:
 - name: default
 - name: mattermost
   slack_configs:
-     - api_url: "https://talk.gigaset-devnet.pl/hooks/8imzn5o7obfs8eow174kciioxr"
-       username: '{{ template "slack.default.username" . }}'
-       color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
-       title: '{{ template "slack.default.title" . }}'
-       title_link: '{{ template "slack.default.titlelink" . }}'
-       pretext: '**{{ .CommonAnnotations.summary }}**'
-       text: |-
-         {{- template  "slack.default.text" . -}}
-       fallback: '{{ template "slack.default.fallback" . }}'
-       icon_emoji: '{{ template "slack.default.iconemoji" . }}'
-       icon_url: '{{ template "slack.default.iconurl" . }}'
+     - api_url: "https://talk.gigaset-devnet.pl/hooks/geu8yf6dp3njfgikp7josw3sto"
 templates:
-         - '/etc/alertmanager/configmaps/alertmanager-templates/*.tmpl'
+         - '/etc/alertmanager/configmaps/alertmanager-template/*.tmpl'

@@ -14,3 +14,12 @@ spec:
       rules:
       - record: instance:node_network_received_bytes:rate:sum
         expr: sum by(instance) (rate(node_network_receive_bytes_total[3m]))
+    - name: ./my-custom-alerts
+      rules:
+      - alert: instance:node_network_received_bytes:rate:sum:high
+        expr: instance:node_network_received_bytes:rate:sum > 10000
+        for: 1m
+        labels:
+           severity: critical
+        annotations:
+           description: Node network recived bytes {{ printf "%.4g" $value  }}.

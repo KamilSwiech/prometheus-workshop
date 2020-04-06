@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-template
+data:
+   alert-notifcations-template.tmpl: |-
+       {{ define "__alertmanager" }}Cluster: {{ .CommonLabels.cluster }}{{ end }}
+       {{ define "__alertmanagerURL" }}{{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }}{{ end }}
+       
+       {{ define "__subject" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join " " }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join " " }}{{ end }}){{ end }}{{ end }}
+       {{ define "__description" }}{{ end }}
+       {{ define "__single_message_title" }}{{ range .Alerts.Firing }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ range .Alerts.Resolved }}{{ .Labels.alertname }} @ {{ .Annotations.identifier }}{{ end }}{{ end }}
+       {{ define "__title_with_4_labels" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }} for {{ .CommonLabels.job }}
+                      {{- if gt (len .CommonLabels) (len .GroupLabels) -}}
+                        {{" "}}(
+                        {{- with .CommonLabels.Remove .GroupLabels.Names }}
+                          {{- range $index, $label := .SortedPairs -}}
+                            {{ if lt $index 4 -}}
+                            {{- $label.Name }}="{{ $label.Value -}}"
+                             {{- if lt $index 3 -}},{{- end }}
+                            {{- end }}
+                          {{- end }}
+                        {{- end -}}
+                        ) 
+                      {{- end }}{{ end }}
+       {{ define "__text_alert_list" }}{{ range . }}Labels:
+       {{ range .Labels.SortedPairs }} - {{ .Name }} = {{ .Value }}
+       {{ end }}Annotations:
+       {{ range .Annotations.SortedPairs }} - {{ .Name }} = {{ .Value }}
+       {{ end }}Source: {{ .GeneratorURL }}
+       {{ end }}{{ end }}
+       
+       
+       {{ define "slack.default.title" }}{{ template "__title_with_4_labels" . }}{{ end }}
+       {{ define "slack.default.username" }}{{ template "__alertmanager" . }}{{ end }}
+       {{ define "slack.default.fallback" }}{{ template "slack.default.title" . }} | {{ template "slack.default.titlelink" . }}{{ end }}
+       {{ define "slack.default.pretext" }}{{ end }}
+       {{ define "slack.default.titlelink" }}{{ template "__alertmanagerURL" . }}{{ end }}
+       {{ define "slack.default.iconemoji" }}{{ end }}
+       {{ define "slack.default.iconurl" }}{{ end }}
+       {{ define "slack.default.text" }}
+       {{- if  .CommonAnnotations.dashboard -}}  :chart_with_upwards_trend: *<{{ .CommonAnnotations.dashboard }}|Graph>* {{- "\n" -}}  {{- end -}}
+       {{- if  .CommonAnnotations.runbook -}}   :notebook: *<{{ .Annotations.runbook }}|Runbook>* {{- "\n" -}}  {{- end -}}
+       *Alerts:*{{ range .Alerts }} {{ .Labels.alertname }},{{end}}{{ if .CommonLabels.severity }} - `{{ .CommonLabels.severity }}`{{ end }}
+       {{ if .CommonAnnotations.summary -}} *Summary:* {{ .CommonAnnotations.summary }}{{- "\n" -}}{{ end }}
+       {{- if .CommonAnnotations.description }} *Description:* {{ .CommonAnnotations.description }}{{- "\n" -}}{{ end }}
+       {{- range .Alerts -}}
+       *Details:*
+       {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+       {{ end }}
+       {{ end }}{{  end }}
+       {{ define "slack.default.footer" }}{{ end }}
+
+
+
+       {{ define "pagerduty.default.description" }}{{ template "__title_with_4_labels" . }}{{ end }}
+       {{ define "pagerduty.default.client" }}{{ template "__alertmanager" . }}{{ end }}
+       {{ define "pagerduty.default.clientURL" }}{{ template "__alertmanagerURL" . }}{{ end }}
+       {{ define "pagerduty.default.instances" }}{{ template "__text_alert_list" . }}{{ end }}
+
