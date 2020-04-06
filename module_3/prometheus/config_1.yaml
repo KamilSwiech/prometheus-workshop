@@ -1,5 +1,7 @@
 ---
 alertmanager:
+  alertmanagerSpec:
+    configSecret: "alertmanager-config"
   service:
     nodePort: 30093
     type: NodePort
