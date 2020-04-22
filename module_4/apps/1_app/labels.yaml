@@ -6,6 +6,7 @@ metadata:
   namespace: monitoring
   labels:
     app: hello
+    app.kubernetes.io/type: custom-app
 spec:
   containers:
   - name: hello-labels
@@ -21,9 +22,12 @@ kind: Service
 metadata:
   name: hello
   namespace: monitoring
+  labels:
+    app.kubernetes.io/type: custom-app
 spec:
   selector:
     app: hello
+    app.kubernetes.io/type: custom-app
   ports:
     - name: metrics
       protocol: TCP
