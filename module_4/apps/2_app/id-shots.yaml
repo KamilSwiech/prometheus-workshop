@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: hello-labels
-    image: swiechkamil/labels:1
+    image: swiechkamil/id-shots:1
     resources:
       limits:
         memory: "200Mi"
