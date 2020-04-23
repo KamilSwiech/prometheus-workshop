@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labels
+  labels:
+    app: labels
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      app: labels
+  template:
+    metadata:
+      labels:
+        app: labels
+        app.kubernetes.io/type: custom-app
+    spec:
+      containers:
+      - name: hello-labels
+        image: swiechkamil/id-shots:1
+        resources:
+          limits:
+            memory: "200Mi"
+          requests:
+            memory: "100Mi"
+        ports:
+        - containerPort: 8000
+        - containerPort: 8001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  labels:
+    app.kubernetes.io/type: custom-app
+    app: labels
+spec:
+  selector:
+    app: labels
+    app.kubernetes.io/type: custom-app
+  ports:
+    - name: metrics
+      protocol: TCP 
+      port: 8000
+      targetPort: 8000
+      nodePort: 30080
+    - name: server
+      protocol: TCP 
+      port: 8001
+      targetPort: 8001
+      nodePort: 30081
+  type: NodePort
