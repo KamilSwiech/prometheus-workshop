@@ -1,0 +1,12 @@
+# create snapshop of all current data
+curl -XPOST http://localhost:30090/api/v1/admin/tsdb/snapshot
+curl -XPOST http://localhost:30090/api/v1/admin/tsdb/snapshot?skip_head=true
+
+# delete series from tsdb
+# if parameter start is not set - takes minimum possible time
+# if parameter end is not set - takes maximum possible time
+curl -X POST \
+  -g 'http://localhost:30090/api/v1/admin/tsdb/delete_series?match[]=up&match[]=process_start_time_seconds{job="prometheus"}'
+
+# clean tombstones
+curl -XPOST http://localhost:30090/api/v1/admin/tsdb/clean_tombstones

@@ -1,0 +1,29 @@
+# instant query with parameters
+curl http://ksa-prometheus.blue/api/v1/query --data-urlencode 'query=up{pod="pop-grafana-546fdd9c58-b62nz"}'
+curl http://ksa-prometheus.blue/api/v1/query --data-urlencode 'query=up{pod=~"pop-grafana-.*"}'
+
+# range query
+curl http://ksa-prometheus.blue/api/v1/query_range?query=up&start=2020-04-27T20:10:30.781Z&end=2020-04-30T20:11:00.781Z&step=15s
+
+
+# metadata query
+# allows findind multipe series
+curl -g 'http://ksa-prometheus.blue/api/v1/series?' --data-urlencode 'match[]=up' --data-urlencode 'match[]=process_start_time_seconds{job="prometheus"}'
+
+# label names and values
+curl 'ksa-prometheus.blue/api/v1/labels'
+curl http://ksa-prometheus.blue/api/v1/label/job/values
+
+# get targets
+curl http://ksa-prometheus.blue/api/v1/targets
+curl 'http://ksa-prometheus.blue/api/v1/targets?state=active'
+
+# get rules
+curl http://ksa-prometheus.blue/api/v1/rules
+curl http://ksa-prometheus.blue/api/v1/rules?type=alert
+
+# get alerts (not stable)
+curl http://ksa-prometheus.blue/api/v1/alerts
+
+# queries for tsdb stats
+curl http://ksa-prometheus.blue/api/v1/status/tsdb

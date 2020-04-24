@@ -25,6 +25,7 @@ prometheus:
     nodePort: 30090
     type: NodePort
   prometheusSpec:
+    enableAdminAPI: true
     externalLabels:
        cluster: kind
     resources:
